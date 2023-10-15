@@ -1,6 +1,11 @@
+import 'package:daily_news/components/news_tile.dart';
 import 'package:daily_news/models/category.dart';
+import 'package:daily_news/views/news_details.dart';
 
 import 'package:flutter/material.dart';
+
+import '../models/article_model.dart';
+import '../services/api_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ApiService apiServices = ApiService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,27 +44,93 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
       ),
       body: SafeArea(
-          child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            child: SizedBox(
-              height: 110,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
+          child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
+              ),
+              child: SizedBox(
+                height: 110,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categoryCard.length,
+                  itemBuilder: (context, index) {
+                    return categorySection(categoryCard[index], context);
+                  },
                 ),
-                scrollDirection: Axis.horizontal,
-                itemCount: categoryCard.length,
-                itemBuilder: (context, index) {
-                  return categorySection(categoryCard[index], context);
-                },
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 15,
+                top: 10,
+              ),
+              child: Text(
+                'TRENDING NOW',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 600,
+              child: FutureBuilder(
+                  future: apiServices.getArticle(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Article>> snapshot) {
+                    if (snapshot.hasData) {
+                      List<Article>? articles = snapshot.data;
+                      return ListView.builder(
+                        itemCount: articles?.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              top: 15,
+                              left: 15,
+                              right: 15,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => NewsDetails(
+                                          newsDetailSource:
+                                              articles?[index].source.name,
+                                          newsDetailTitle:
+                                              articles?[index].title,
+                                          newsDetailImage:
+                                              articles?[index].urlToImage,
+                                          newsDetailDescription:
+                                              articles?[index].description,
+                                          newsAuthor: articles?[index].author,
+                                          newsPublishTime:
+                                              articles?[index].publishedAt,
+                                        )));
+                              },
+                              child: NewsTile(
+                                newsImage: articles?[index].urlToImage,
+                                newsSource: articles?[index].source.name,
+                                newsTitle: articles?[index].title,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
+            )
+          ],
+        ),
       )),
     );
   }
