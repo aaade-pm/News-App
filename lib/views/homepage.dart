@@ -66,8 +66,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
+            const Padding(
+              padding: EdgeInsets.only(
                 left: 15,
                 top: 10,
               ),
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 600,
               child: FutureBuilder(
-                  future: apiServices.getArticle(),
+                  future: apiServices.getTrendingArticle(),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Article>> snapshot) {
                     if (snapshot.hasData) {
@@ -139,7 +139,8 @@ class _HomePageState extends State<HomePage> {
 categorySection(Category category, BuildContext context) {
   return InkWell(
     onTap: () {
-      Navigator.pushNamed(context, '/secondRoute');
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => category.routes));
     },
     child: Container(
       padding: const EdgeInsets.only(

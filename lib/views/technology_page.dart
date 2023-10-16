@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 import '../models/article_model.dart';
 
-class BusinessPage extends StatefulWidget {
-  const BusinessPage({super.key});
+class TechnologyPage extends StatefulWidget {
+  const TechnologyPage({super.key});
 
   @override
-  State<BusinessPage> createState() => _BusinessPageState();
+  State<TechnologyPage> createState() => _TechnologyPageState();
 }
 
-class _BusinessPageState extends State<BusinessPage> {
+class _TechnologyPageState extends State<TechnologyPage> {
   ApiService apiServices = ApiService();
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _BusinessPageState extends State<BusinessPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Business',
+              'Technology',
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 25,
@@ -56,7 +56,7 @@ class _BusinessPageState extends State<BusinessPage> {
         elevation: 0,
       ),
       body: FutureBuilder(
-          future: apiServices.getBusinessArticle(),
+          future: apiServices.getTechnologyArticle(),
           builder:
               (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
             if (snapshot.hasData) {

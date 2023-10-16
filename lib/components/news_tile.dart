@@ -1,9 +1,10 @@
 import 'package:daily_news/components/constant.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class NewsTile extends StatelessWidget {
-  final newsImage, newsSource, newsTitle;
-  const NewsTile({
+  dynamic newsImage, newsSource, newsTitle;
+  NewsTile({
     super.key,
     required this.newsImage,
     required this.newsSource,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyButton extends StatelessWidget {
-  final buttonName, iconName;
-  const MyButton({
+  dynamic buttonName, iconName;
+  MyButton({
     super.key,
     required this.buttonName,
     required this.iconName,

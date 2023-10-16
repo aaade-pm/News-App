@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../components/constant.dart';
 
+// ignore: must_be_immutable
 class NewsDetails extends StatelessWidget {
-  final newsDetailTitle,
+  dynamic newsDetailTitle,
       newsDetailSource,
       newsDetailImage,
       newsDetailDescription,
       newsAuthor,
       newsPublishTime;
-  const NewsDetails(
+  NewsDetails(
       {super.key,
       required this.newsDetailTitle,
       required this.newsDetailImage,
@@ -122,7 +123,7 @@ class NewsDetails extends StatelessWidget {
               const SizedBox(
                 height: defautPadding * 2,
               ),
-              const MyButton(
+              MyButton(
                 buttonName: 'Read More',
                 iconName: Icons.arrow_forward_ios,
               )

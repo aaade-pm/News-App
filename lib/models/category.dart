@@ -1,4 +1,9 @@
 import 'package:daily_news/views/business_page.dart';
+import 'package:daily_news/views/entertainment_page.dart';
+import 'package:daily_news/views/healthcare_page.dart';
+import 'package:daily_news/views/science_page.dart';
+import 'package:daily_news/views/sport_page.dart';
+import 'package:daily_news/views/technology_page.dart';
 
 class Category {
   final String image, categoryName;
@@ -19,26 +24,26 @@ List categoryCard = [
   Category(
     image: 'assets/images/Entertainment.jpg',
     categoryName: 'Entertainment',
-    routes: null,
+    routes: const EntertainmentPage(),
   ),
   Category(
     image: 'assets/images/Healthcare.jpg',
     categoryName: 'Healthcare',
-    routes: null,
+    routes: const HealthCarePage(),
   ),
   Category(
     image: 'assets/images/News.jpg',
-    categoryName: 'News',
-    routes: null,
+    categoryName: 'Technology',
+    routes: const TechnologyPage(),
   ),
   Category(
     image: 'assets/images/Science.jpg',
     categoryName: 'Science',
-    routes: null,
+    routes: const SciencePage(),
   ),
   Category(
     image: 'assets/images/Sport.jpg',
     categoryName: 'Sport',
-    routes: null,
+    routes: const SportPage(),
   ),
 ];
