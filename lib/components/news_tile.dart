@@ -44,6 +44,29 @@ class NewsTile extends StatelessWidget {
               fit: BoxFit.cover,
               height: 170,
               width: double.infinity,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  // If the image has fully loaded, display it
+                  return child;
+                } else if (newsImage == null || newsImage.isEmpty) {
+                  // If the URL is empty or null, display an error image
+                  return Image.asset('assets/images/News-replacement.jpg');
+                } else {
+                  // If the URL is not empty but the image is still loading,display a loading indicator
+                  return Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              },
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
+                // If an error occurs while loading the image, you can display an error image or a placeholder
+                return Image.asset('assets/images/News-replacement.jpg');
+              },
             ),
           ),
           const SizedBox(

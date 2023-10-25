@@ -26,7 +26,7 @@ class Article {
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
       source: Source.fromJson(json['source']),
-      author: json['author'] ?? json['publishedAt'],
+      author: json['author'] ?? '',
       publishedAt: json['publishedAt'] as String,
       description: json['description'] ?? 'Default',
       title: json['title'] as String,

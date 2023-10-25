@@ -1,31 +1,18 @@
 import 'package:daily_news/components/news_tile.dart';
-import 'package:daily_news/services/api_services.dart';
+import 'package:daily_news/providers/data_provider.dart';
 import 'package:daily_news/views/news_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/article_model.dart';
 
-class BusinessPage extends StatefulWidget {
+class BusinessPage extends ConsumerWidget {
   const BusinessPage({super.key});
 
   @override
-  State<BusinessPage> createState() => _BusinessPageState();
-}
+  Widget build(BuildContext context, ref) {
+    final businessNewsData = ref.watch(businessArticleProvider);
 
-class _BusinessPageState extends State<BusinessPage> {
-  ApiService apiServices = ApiService();
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
@@ -55,49 +42,46 @@ class _BusinessPageState extends State<BusinessPage> {
         backgroundColor: Colors.grey[400],
         elevation: 0,
       ),
-      body: FutureBuilder(
-          future: apiServices.getBusinessArticle(),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
-            if (snapshot.hasData) {
-              List<Article>? articles = snapshot.data;
-              return ListView.builder(
-                itemCount: articles?.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      top: 15,
-                      left: 15,
-                      right: 15,
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => NewsDetails(
-                                  newsDetailSource:
-                                      articles?[index].source.name,
-                                  newsDetailTitle: articles?[index].title,
-                                  newsDetailImage: articles?[index].urlToImage,
-                                  newsDetailDescription:
-                                      articles?[index].description,
-                                  newsAuthor: articles?[index].author,
-                                  newsPublishTime: articles?[index].publishedAt,
-                                )));
-                      },
-                      child: NewsTile(
-                        newsImage: articles?[index].urlToImage,
-                        newsSource: articles?[index].source.name,
-                        newsTitle: articles?[index].title,
-                      ),
-                    ),
-                  );
-                },
+      body: businessNewsData.when(
+        data: (businessNewsData) {
+          List<Article> newsList = businessNewsData.map((e) => e).toList();
+          return ListView.builder(
+            itemCount: newsList.length,
+            itemBuilder: (_, index) {
+              return Padding(
+                padding: const EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NewsDetails(
+                              newsDetailSource: newsList[index].source.name,
+                              newsDetailTitle: newsList[index].title,
+                              newsDetailImage: newsList[index].urlToImage,
+                              newsDetailDescription:
+                                  newsList[index].description,
+                              newsAuthor: newsList[index].author,
+                              newsPublishTime: newsList[index].publishedAt,
+                            )));
+                  },
+                  child: NewsTile(
+                    newsImage: newsList[index].urlToImage,
+                    newsSource: newsList[index].source.name,
+                    newsTitle: newsList[index].title,
+                  ),
+                ),
               );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+            },
+          );
+        },
+        error: (err, s) => Text(err.toString()),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }

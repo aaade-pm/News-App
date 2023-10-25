@@ -29,6 +29,12 @@ class MyButton extends StatelessWidget {
           ),
         ],
       ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey[300],
+        shape: StadiumBorder(),
+        fixedSize: Size(200, 50),
+        alignment: Alignment.center,
+      ),
     );
   }
 }

@@ -49,32 +49,48 @@ class NewsDetails extends StatelessWidget {
                 borderRadius: BorderRadius.circular(7),
                 child: Image.network(
                   newsDetailImage,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      // If the image has fully loaded, display it
+                      return child;
+                    } else if (newsDetailImage == null ||
+                        newsDetailImage.isEmpty) {
+                      // If the URL is empty or null, display an error image
+                      return Image.asset('assets/images/News-replacement.jpg');
+                    } else {
+                      // If the URL is not empty but the image is still loading,display a loading indicator
+                      return Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                    // If an error occurs while loading the image, you can display an error image or a placeholder
+                    return Image.asset(
+                        'assets/images/News-replacement.jpg'); // You can create your own ErrorImageWidget
+                  },
                   fit: BoxFit.cover,
-                  height: 220,
+                  height: 280,
                   width: double.infinity,
                 ),
               ),
               const SizedBox(
-                height: defautPadding * 0.5,
+                height: defautPadding * 0.8,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    newsAuthor,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  newsAuthor,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
                   ),
-                  Text(
-                    newsPublishTime,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
+                ),
               ),
               const SizedBox(
                 height: defautPadding * 1.5,

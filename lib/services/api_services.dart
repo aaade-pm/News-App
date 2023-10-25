@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:daily_news/models/article_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class ApiService {
   final endPointUrl =
@@ -36,7 +38,7 @@ class ApiService {
           body.map((dynamic item) => Article.fromJson(item)).toList();
       return articles;
     } else {
-      throw ("Can't get article");
+      throw Exception("Can't get article");
     }
   }
 
@@ -111,7 +113,7 @@ class ApiService {
   }
 
   Future<List<Article>> getTrendingArticle() async {
-    var res = await http.get(Uri.parse(endPointUrl6));
+    Response res = await http.get(Uri.parse(endPointUrl6));
 
     if (res.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(res.body);
@@ -120,7 +122,11 @@ class ApiService {
           body.map((dynamic item) => Article.fromJson(item)).toList();
       return articles;
     } else {
-      throw ("Can't get article");
+      throw Exception(res.reasonPhrase);
     }
   }
 }
+
+final articleProvider = Provider<ApiService>((ref) {
+  return ApiService();
+});

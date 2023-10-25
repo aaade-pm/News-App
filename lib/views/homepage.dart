@@ -1,3 +1,4 @@
+import 'package:daily_news/components/constant.dart';
 import 'package:daily_news/components/news_tile.dart';
 import 'package:daily_news/models/category.dart';
 import 'package:daily_news/views/news_details.dart';
@@ -21,31 +22,91 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Daily',
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 25,
-              ),
-            ),
-            Text(
-              'News',
-              style: TextStyle(
-                color: Colors.green[800],
-                fontSize: 25,
-              ),
-            ),
+            Expanded(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Daily',
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 23,
+                  ),
+                ),
+                Text(
+                  'News',
+                  style: TextStyle(
+                    color: Colors.green[800],
+                    fontSize: 23,
+                  ),
+                ),
+              ],
+            )),
           ],
         ),
-        backgroundColor: Colors.grey[400],
+        actions: [
+          Icon(
+            Icons.notifications_none_outlined,
+            color: Colors.black54,
+            size: 25,
+          ),
+          SizedBox(
+            width: defautPadding,
+          ),
+          Icon(
+            Icons.search_outlined,
+            color: Colors.black54,
+            size: 25,
+          ),
+          SizedBox(
+            width: defautPadding,
+          ),
+        ],
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black54,
         elevation: 0,
       ),
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
+      drawer: const Drawer(),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        backgroundColor: Colors.black,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+            ),
+            label: 'Home',
+            activeIcon: Icon(Icons.home_filled),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.wifi_tethering_outlined,
+            ),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark_added_outlined,
+            ),
+            label: 'Saved',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outlined,
+            ),
+            label: 'Profile',
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SafeArea(
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -69,7 +130,8 @@ class _HomePageState extends State<HomePage> {
             const Padding(
               padding: EdgeInsets.only(
                 left: 15,
-                top: 10,
+                top: 20,
+                bottom: 20,
               ),
               child: Text(
                 'TRENDING NOW',
@@ -81,7 +143,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(
-              height: 600,
+              height: MediaQuery.of(context).size.height * 0.58,
               child: FutureBuilder(
                   future: apiServices.getTrendingArticle(),
                   builder: (BuildContext context,
@@ -128,10 +190,13 @@ class _HomePageState extends State<HomePage> {
                       child: CircularProgressIndicator(),
                     );
                   }),
+            ),
+            SizedBox(
+              height: defautPadding * 3,
             )
           ],
-        ),
-      )),
+        )),
+      ),
     );
   }
 }
